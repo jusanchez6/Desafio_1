@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    cout << "Hola mundo" << endl;
-    cout << "mmgvaso" << endl;
+    cout << "Hola mundo adios mundo y ya" << endl;
+    while(true);
     return 0;
 }
