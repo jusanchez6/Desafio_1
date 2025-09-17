@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdio>
 
-
+#include <compress.hpp>
 #include <solver.hpp>
 
 /**
