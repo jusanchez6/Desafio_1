@@ -1,10 +1,9 @@
 #include <QCoreApplication>
-#include <iostream>
 
-using namespace std;
+#include <app.hpp>
 
 int main()
 {
-    cout << "Hola mundo" << endl;
-    return 0;
+    return app_main() ? 0 : 1;
+
 }

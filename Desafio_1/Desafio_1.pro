@@ -4,10 +4,12 @@ CONFIG  += c++17 console
 SOURCES += \
     src/main.cpp \
     src/solver.cpp \
+    src/app.cpp \
     src/compress.cpp
 
 HEADERS += \
     include/solver.hpp \
+    include/app.hpp \
     include/compress.hpp
 
 INCLUDEPATH += include
