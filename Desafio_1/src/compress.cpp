@@ -1,6 +1,6 @@
 #include <compress.hpp>
 
-namespace aux
+namespace
 {
     // Funciones auxiliares para la descompresión
 
@@ -17,8 +17,8 @@ namespace aux
      */
     char *grow_and_copy(char *oldbuf, size_t oldcap, size_t newcap)
     {
-        char *p = new char[newcap];     // Reserva un nuevo buffer con mayor capacidad
-        if (oldbuf)                     // Si existía un buffer anterior...
+        char *p = new char[newcap]; // Reserva un nuevo buffer con mayor capacidad
+        if (oldbuf)                 // Si existía un buffer anterior...
         {
             memcpy(p, oldbuf, oldcap); // Copia el contenido del buffer viejo al nuevo
             delete[] oldbuf;           // Libera la memoria del buffer anterior
@@ -93,118 +93,100 @@ char *rle_decompress(const uint8_t *in, size_t len)
 
 char *lz78_decompress(const uint8_t *in, size_t len)
 {
+    size_t dict_cap = 1024;             // capacidad inicial del diccionario
+    char **dict = new char *[dict_cap]; // arreglo de punteros a cadenas
+    size_t dict_count = 0;              // cuántas entradas reales hay en el diccionario
 
-    size_t dict_cap = 1024;
-    char **dict = new char *[dict_cap]; // diccionario de cadenas
-    size_t dict_size = 0;
-
-    size_t out_cap = 256;
-    char *out = new char[out_cap]; // salida
-    size_t out_len = 0;
+    size_t out_cap = 512;          // capacidad inicial de la salida
+    char *out = new char[out_cap]; // buffer dinámico para salida
+    size_t out_len = 0;            // longitud de salida actual
 
     size_t i = 0;
-
     while (i < len)
-    {
-
+    { // procesar mientras haya datos en la entrada
         if (!isdigit(in[i]))
-        {
-            // libera memoria y retorna error si el primer char no es digito
-            for (size_t j = 0; j < dict_size; ++j)
-            {
+        { // error: cada token debe empezar con un índice (dígito)
+            for (size_t j = 0; j < dict_count; ++j)
                 delete[] dict[j];
-            }
             delete[] dict;
             delete[] out;
             return nullptr;
         }
 
-        unsigned long index = 0;
-
+        unsigned long idx = 0; // índice leído del stream comprimido
         while (i < len && isdigit(in[i]))
-        {
-            index = index * 10 + (unsigned long)(in[i] - '0');
-            i++;
+        { // convertir los dígitos en número
+            idx = idx * 10 + (unsigned long)(in[i] - '0');
+            ++i;
         }
+
         if (i >= len)
-        {
-            // libera memoria y retorna error si la entrada termina luego del digito
-            for (size_t j = 0; j < dict_size; ++j)
-            {
+        { // error: la entrada no puede terminar justo después del índice
+            for (size_t j = 0; j < dict_count; ++j)
                 delete[] dict[j];
-            }
             delete[] dict;
             delete[] out;
             return nullptr;
         }
 
-        char c = (char)in[i++]; // toma el simbolo
+        char c = (char)in[i++]; // caracter literal que acompaña al índice
 
         char *s = nullptr;
-
-        if (index == 0)
-        {
-            // caso especial: nueva cadena es solo el caracter c
+        if (idx == 0)
+        { // caso especial: cadena nueva es solo 'c'
             s = new char[2];
             s[0] = c;
             s[1] = '\0';
         }
         else
         {
-            if (index > dict_size)
-            {
-                // libera memoria y retorna error si el indice es invalido
-                for (size_t j = 0; j < dict_size; ++j)
-                {
+            if (idx > dict_count)
+            { // error: índice fuera de rango
+                for (size_t j = 0; j < dict_count; ++j)
                     delete[] dict[j];
-                }
                 delete[] dict;
                 delete[] out;
                 return nullptr;
             }
-
-            // nueva cadena es la cadena en dict[index - 1] + c
-            char *prev = dict[index - 1];
-            size_t prev_len = strlen(prev);
-            s = new char[prev_len + 2];
-            memcpy(s, prev, prev_len);
-            s[prev_len] = c;
-            s[prev_len + 1] = '\0';
+            char *pref = dict[idx - 1]; // recuperar cadena previa del diccionario
+            size_t plen = strlen(pref);
+            s = new char[plen + 2]; // construir nueva cadena = prefijo + c
+            memcpy(s, pref, plen);
+            s[plen] = c;
+            s[plen + 1] = '\0';
         }
 
-        // agrega s a la salida
-        size_t s_len = strlen(s);
-        if (out_len + s_len + 1 > out_cap)
-        {
-
-            size_t new_out_cap = out_cap;
-
-            while (out_len + s_len + 1 > new_out_cap)
-                new_out_cap *= 2;
-
-            out = grow_and_copy(out, out_cap, new_out_cap);
-            out_cap = new_out_cap;
+        size_t slen = strlen(s); // longitud de la nueva cadena
+        if (out_len + slen + 1 > out_cap)
+        { // si no cabe en salida → crecer buffer
+            size_t newcap = out_cap;
+            while (out_len + slen + 1 > newcap)
+                newcap *= 2;
+            out = grow_and_copy(out, out_cap, newcap);
+            out_cap = newcap;
         }
+        memcpy(out + out_len, s, slen); // copiar s al buffer de salida
+        out_len += slen;
+        out[out_len] = '\0'; // mantener la salida como string C
 
-        memcpy(out + out_len, s, s_len);
-        out_len += s_len;
-        out[out_len] = '\0';
-
-        // agrega s al diccionario
-        if (dict_size + 1 > dict_cap)
-        {
-            size_t new_dict_cap = dict_cap * 2;
-            char **new_dict = new char *[new_dict_cap];
-            for (size_t j = 0; j < dict_size; ++j)
-            {
-                new_dict[j] = dict[j];
-            }
-
+        // agregar s al diccionario
+        if (dict_count + 1 > dict_cap)
+        { // si no cabe, duplicar la capacidad
+            size_t newcap = dict_cap * 2;
+            char **nd = new char *[newcap];
+            for (size_t j = 0; j < dict_count; ++j)
+                nd[j] = dict[j];
             delete[] dict;
-            dict = new_dict;
-            dict_cap = new_dict_cap;
+            dict = nd;
+            dict_cap = newcap;
         }
-
-        dict[dict_size++] = s;
+        dict[dict_count++] = s; // guardar puntero a la nueva cadena
     }
+
+    // liberar memoria del diccionario (no se necesita más)
+    for (size_t j = 0; j < dict_count; ++j)
+        delete[] dict[j];
+    delete[] dict;
+
+    return out; // retornar la cadena descomprimida
 }
