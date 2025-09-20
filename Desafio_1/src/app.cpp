@@ -17,8 +17,6 @@ my_error_t app_main() {
     // Genera los nombres de los archivos a analizar
 
     for (int i = 1; i <= n; i++) {
-
-
         char enc_name[64];
         char pista_name[64];
 
@@ -36,6 +34,25 @@ my_error_t app_main() {
             continue;
         }
     }
+
+
+    // PRUEBAS DE FUNCIONAMIENTO DE DESCOMPRESIÓN
+    const uint8_t data[] = "0A0B1A2A3B";
+    printf("\n\nTexto comprimido: %s\n", data);
+    char* result = lz78_decompress(data, strlen((char*)data));
+    if (result) {
+        printf("Descomprimido: %s\n", result);
+    }
+
+    const uint8_t data2[] = "4A3B2C1D2A";
+    printf("Texto comprimido: %s\n", data2);
+    char* result2 = rle_decompress(data2, strlen((char*)data2));
+    if (result2) {
+        printf("Descomprimido: %s\n", result); // "AAAAABBBCC"
+        delete[] result2;
+    }
+
+
 
     return OK;
 }
