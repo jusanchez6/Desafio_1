@@ -1,3 +1,24 @@
+/**
+ * @file compress.chpp
+ * @brief Archivo de cabecera para las funciones de descompresión y operaciones a nivel de bit
+ *
+ * Este modulo contiene:
+ * ror_8: Rotación de bits a la derecha
+ * rol_8: Rotación de bits a la izquierda
+ * rle_decompress: Función para la descompresión por medio de RLE
+ * LZ78_decompress: Función para la descompresión por medio de LZ78
+ *
+ * Además cuenta con una función auxiliar para la redimensión de un buffer dinamico.
+ * grow_and_copy: Función Auxiliar para el redimensionamiento de buffers dinamicos. 
+ * 
+ * @authors Julián Sánchez
+ *          Jaider Bedoya
+ * 
+ * @date 22/09/2025
+ * @version 1.03
+ */
+
+
 #include <compress.hpp>
 
 namespace
@@ -38,7 +59,7 @@ uint8_t rol_8(uint8_t v, unsigned int n)
     return (uint8_t)((v << n) | (v >> (8 - n)));
 }
 
-char *rle_decompress(const uint8_t *in, size_t len)
+char *rle_decompress(const uint8_t* in, size_t len)
 {
     size_t cap = 256;
     char *out = new char[cap]; // reserva memoria inicial para 256 bytes a la salida

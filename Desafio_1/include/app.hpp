@@ -7,6 +7,9 @@
 #include <compress.hpp>
 #include <solver.hpp>
 
+
+#define NO_SIZE 0
+
 /**
  * @brief Declaración del tipo my_error_t para el manejo de excepciones y errores
  */
@@ -37,5 +40,6 @@ my_error_t app_main();
  */
 my_error_t read_file (const char* path, uint8_t** out_buf, size_t* out_len);
 
+char* get_frag(const char* path);
 
-#endif
+#endif  //APP_HPP
