@@ -72,8 +72,6 @@ my_error_t app_main()
         snprintf(enc_name, sizeof(enc_name), "Encriptado%d.txt", i);
         snprintf(pista_name, sizeof(pista_name), "pista%d.txt", i);
 
-        cout << "\nCaso " << i << ": " << enc_name << " con " << pista_name << endl;
-
         // ====== Lectura del archivo encriptado ============
         uint8_t *enc = nullptr;
         size_t enc_len = 0;
@@ -95,13 +93,8 @@ my_error_t app_main()
             continue;
         }
 
-        cout << "Contenido de la pista (" << pista_name << "): " << frag << endl;
-
-        // Liberar memoria reservada
-        delete[] enc;
-        delete[] frag;
-
-
+        cout << "** " << enc_name << " **\n";
+        
         // buscar el n y k del archivo i
 
         char *out_msg = nullptr;
@@ -109,25 +102,26 @@ my_error_t app_main()
         uint8_t out_n = 0;
         uint8_t out_k = 0;
 
+        bool result = finder(enc, enc_len, frag, &out_msg, &out_method, &out_n, &out_k);
+
+        if (result) {
+            cout << ">>> Archivo desencriptado con éxito!\n";
+            cout << "Compresión: " << out_method << endl;
+            cout << "Rotación: " << (int)out_n << "\nk: " << (int)out_k << endl;
+            cout << "Mensaje: \n\n" << out_msg << endl;
+
+            // Liberar la memoria reservada
+            delete[] out_msg;
+            delete[] out_method;
+
+        } else {
+            cout << "No se encontró coincidencia con la pista.\n";
+        }
+
+        // Liberar memoria reservada
+        delete[] enc;
+        delete[] frag;
         
-    }
-
-    // PRUEBAS DE FUNCIONAMIENTO DE DESCOMPRESIÓN
-    const uint8_t data[] = "0A0B1A2A3B";
-    printf("\n\nTexto comprimido: %s\n", data);
-    char *result = lz78_decompress(data, strlen((char *)data));
-    if (result)
-    {
-        printf("Descomprimido: %s\n", result);
-    }
-
-    const uint8_t data2[] = "4A3B2C1D2A";
-    printf("Texto comprimido: %s\n", data2);
-    char *result2 = rle_decompress(data2, strlen((char *)data2));
-    if (result2)
-    {
-        printf("Descomprimido: %s\n", result); // "AAAAABBBCC"
-        delete[] result2;
     }
 
     return OK;
@@ -142,7 +136,7 @@ my_error_t read_file(const char *path, uint8_t **out_buf, size_t *out_len)
         return ERROR;
     }
 
-    FILE *f = fopen(path, "rb");
+    FILE *f = fopen(path, "r");
     if (!f) {
         cout << "Error: No se pudo abrir el archivo: " << path << "\n";
         return ERROR;

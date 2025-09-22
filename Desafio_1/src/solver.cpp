@@ -111,11 +111,12 @@ bool finder(const uint8_t *enc, size_t enc_len, const char *know_fragment, char 
     // ciclos de busqueda
     for (uint8_t n = 1; n <= 7; n++)
     { // busqueda del n
-        for (uint8_t k = 0; k <= 255; k++)
+        for (unsigned int k = 0; k < 256; k++)
         { // busqueda del k
-
+            
             // desencriptar cada posible combinación de n y k
-            uint8_t *dec = decrypt_buffer(enc, enc_len, n, k);
+            uint8_t *dec = decrypt_buffer(enc, enc_len, n, (uint8_t)k);
+
 
             if (!dec)
             {
@@ -130,6 +131,7 @@ bool finder(const uint8_t *enc, size_t enc_len, const char *know_fragment, char 
             // Si todo sale bien... desencriptemos!
             // RLE
             char *rle = rle_decompress(dec, enc_len);
+
             if (rle)
             {
                 if (contains_substr(rle, know_fragment)) {
@@ -137,7 +139,7 @@ bool finder(const uint8_t *enc, size_t enc_len, const char *know_fragment, char 
                     *out_method = new char[4];
                     strcpy(*out_method, "RLE");
                     *out_n = n;
-                    *out_k = k;
+                    *out_k = (uint8_t)k;
 
                     delete[] dec;
                     return true;
@@ -148,14 +150,13 @@ bool finder(const uint8_t *enc, size_t enc_len, const char *know_fragment, char 
             // si llegamos aqui es porque no era RLE
             //LZ78
             char* lz = lz78_decompress(dec, enc_len);
-
             if (lz) {
                 if (contains_substr(lz, know_fragment)) {
                     *out_msg = lz;
                     *out_method = new char[6];
                     strcpy(*out_method, "LZ78");
                     *out_n = n;
-                    *out_k = k;
+                    *out_k = (uint8_t)k;
 
                     delete[] dec;
                     return true;
@@ -166,5 +167,6 @@ bool finder(const uint8_t *enc, size_t enc_len, const char *know_fragment, char 
             delete[] dec;
         }
     }
+
     return false;
 }
