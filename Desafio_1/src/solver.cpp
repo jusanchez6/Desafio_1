@@ -1,3 +1,21 @@
+/**
+ * @file compress.chpp
+ * @brief implementación  de la función de busqueda de fuerza bruta
+ *
+ * Este modulo contiene:
+ *      - finder: Metodo de busqueda por medio de fuerza bruta
+ * Ademas cuenta con funciones auxiliares:
+ *      - decrypt_buffer: Aplica las operaciones de bits para el desencriptado del texto
+ *      - printable_ratio: Analiza el porcentaje del imprimible del texto para evitar analizar texto basura
+ *      - contains_substr: Busca en el texto desencriptado si hay coincidencias con la pista
+ *
+ * @authors Julián Sánchez
+ *          Jaider Bedoya
+ * 
+ * @date 22/09/2025
+ * @version 1.0
+ */
+
 #include <solver.hpp>
 
 namespace
