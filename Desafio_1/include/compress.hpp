@@ -1,3 +1,20 @@
+/**
+ * @file compress.chpp
+ * @brief Archivo de cabecera para las funciones de descompresión y operaciones a nivel de bit
+ *
+ * Este modulo contiene:
+ * ror_8: Rotación de bits a la derecha
+ * rol_8: Rotación de bits a la izquierda
+ * rle_decompress: Función para la descompresión por medio de RLE
+ * LZ78_decompress: Función para la descompresión por medio de LZ78
+ *
+ * @authors Julián Sánchez
+ *          Jaider Bedoya
+ * 
+ * @date 22/09/2025
+ * @version 1.03
+ */
+
 #ifndef COMPRESS_HPP
 #define COMPRESS_HPP
 

@@ -33,6 +33,15 @@ my_error_t app_main() {
             cout << "No se pudo leer: " << enc_name << endl;
             continue;
         }
+
+        // buscar el n y k del archivo i
+
+        char* out_msg = nullptr;
+        char* out_method = nullptr;
+        uint8_t out_n = 0;
+        uint8_t out_k = 0;
+
+        
     }
 
 
