@@ -105,7 +105,6 @@ my_error_t app_main()
         bool result = finder(enc, enc_len, frag, &out_msg, &out_method, &out_n, &out_k);
 
         if (result) {
-            cout << ">>> Archivo desencriptado con éxito!\n";
             cout << "Compresión: " << out_method << endl;
             cout << "Rotación: " << (int)out_n << "\nk: " << (int)out_k << endl;
             cout << "Mensaje: \n\n" << out_msg << endl;

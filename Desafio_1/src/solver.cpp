@@ -11,7 +11,7 @@
  *
  * @authors Julián Sánchez
  *          Jaider Bedoya
- * 
+ *
  * @date 22/09/2025
  * @version 1.0
  */
@@ -69,12 +69,6 @@ namespace
         size_t text_len = strlen(text);
         size_t part_len = strlen(part);
 
-        // Caso especial: patrón vacío
-        if (part_len == 0)
-        {
-            return true; // "" siempre está contenido
-        }
-
         if (part_len > text_len)
         {
             cout << "Error. Pista más grande que el texto original.\n";
@@ -113,10 +107,9 @@ bool finder(const uint8_t *enc, size_t enc_len, const char *know_fragment, char 
     { // busqueda del n
         for (unsigned int k = 0; k < 256; k++)
         { // busqueda del k
-            
+
             // desencriptar cada posible combinación de n y k
             uint8_t *dec = decrypt_buffer(enc, enc_len, n, (uint8_t)k);
-
 
             if (!dec)
             {
@@ -134,7 +127,8 @@ bool finder(const uint8_t *enc, size_t enc_len, const char *know_fragment, char 
 
             if (rle)
             {
-                if (contains_substr(rle, know_fragment)) {
+                if (contains_substr(rle, know_fragment))
+                {
                     *out_msg = rle;
                     *out_method = new char[4];
                     strcpy(*out_method, "RLE");
@@ -148,10 +142,12 @@ bool finder(const uint8_t *enc, size_t enc_len, const char *know_fragment, char 
             }
 
             // si llegamos aqui es porque no era RLE
-            //LZ78
-            char* lz = lz78_decompress(dec, enc_len);
-            if (lz) {
-                if (contains_substr(lz, know_fragment)) {
+            // LZ78
+            char *lz = lz78_decompress(dec, enc_len);
+            if (lz)
+            {
+                if (contains_substr(lz, know_fragment))
+                {
                     *out_msg = lz;
                     *out_method = new char[6];
                     strcpy(*out_method, "LZ78");
