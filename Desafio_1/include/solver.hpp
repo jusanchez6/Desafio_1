@@ -25,7 +25,7 @@
 #include <compress.hpp>
 
 // Macro para la comparación del porcentaje de texto imprimible
-#define RATIO_MIN 0.2
+#define RATIO_MIN 0.3
 
 using namespace std;
 
