@@ -1,6 +1,6 @@
 /**
- * @file compress.chpp
- * @brief Archivo de cabecera para las funciones de descompresión y operaciones a nivel de bit
+ * @file compress.cpp
+ * @brief Implementación para las funciones de descompresión y operaciones a nivel de bit
  *
  * Este modulo contiene:
  * ror_8: Rotación de bits a la derecha
