@@ -127,7 +127,7 @@ my_error_t app_main()
             // Imprimir resultados de la búsqueda
             cout << "Compresión: " << out_method << endl;
             cout << "Rotación: " << (int)out_n << "\n";
-            cout << "k: " << (int)out_k << endl;
+            printf("k: 0x%02X\n", out_k);
             cout << "Mensaje: \n\n" << out_msg << endl;
 
             // Liberar memoria reservada por solver
