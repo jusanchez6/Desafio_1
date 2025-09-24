@@ -1,5 +1,5 @@
 /**
- * @file compress.chpp
+ * @file solver.cpp
  * @brief implementación  de la función de busqueda de fuerza bruta
  *
  * Este modulo contiene:

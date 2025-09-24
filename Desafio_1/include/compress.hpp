@@ -1,5 +1,5 @@
 /**
- * @file compress.chpp
+ * @file compress.hpp
  * @brief Archivo de cabecera para las funciones de descompresión y operaciones a nivel de bit
  *
  * Este modulo contiene:
