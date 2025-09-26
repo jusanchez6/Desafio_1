@@ -112,7 +112,7 @@ my_error_t app_main()
             continue;
         }
 
-        cout << "** " << enc_name << " **\n";
+        cout << "\n\n** " << enc_name << " **\n";
 
         // Variables de salida del solver
         char *out_msg = nullptr;

@@ -53,8 +53,6 @@ uint8_t rol_8 (uint8_t v, unsigned int n);
  * @return  Un puntero a la cadena descomprimida (char*), o nullptr en caso de error.
  *          El usuario es responsable de liberar la memoria con `delete[]`.
  *
- * @note    El formato esperado es: <count><symbol>, repetido varias veces.
- *          Ejemplo: "4A2B1C" → "AAAABB C".
  *
  * Ejemplo de uso:
  * @code
@@ -65,6 +63,10 @@ uint8_t rol_8 (uint8_t v, unsigned int n);
  *     delete[] result;
  * }
  * @endcode
+ * 
+ * @note Gracias al estándar intergaláctico de compresión inventado en este curso, 
+ * debemos leer de a 3 bytes aunque uno sea pura basura y rompa el estandar de la compresión. 
+ * #InnovaciónPedagógica
  */
 char *rle_decompress(const uint8_t *in, size_t len);
 

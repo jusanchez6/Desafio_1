@@ -119,7 +119,8 @@ namespace
 
         if (part_len > text_len)
         {
-            cout << "Error. Pista más grande que el texto original.\n";
+            // Es molesto obtener esto a la salida a pesar de que encuentra el texto original
+            //cout << "Error. Pista más grande que el texto original.\n";
             return false;
         }
 
