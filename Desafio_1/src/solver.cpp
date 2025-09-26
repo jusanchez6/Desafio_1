@@ -21,6 +21,23 @@
 namespace
 {
 
+    /**
+     * @brief Desencripta un buffer de datos aplicando una operación XOR y una rotación a la derecha.
+     *
+     * Esta función toma un buffer de entrada encriptado, aplica la operación XOR con la clave `k`
+     * y luego rota cada byte `n` posiciones a la derecha, generando un nuevo buffer desencriptado.
+     *
+     * @param in   Puntero al buffer de entrada encriptado.
+     * @param len  Longitud en bytes del buffer de entrada.
+     * @param n    Número de bits a rotar hacia la derecha en cada byte.
+     * @param k    Valor de la clave utilizada en la operación XOR.
+     *
+     * @return Puntero a un nuevo buffer dinámico con los datos desencriptados.
+     *         El usuario es responsable de liberar la memoria con `delete[]`.
+     *
+     * @note La función utiliza `new[]` para reservar memoria.
+     *       Asegúrese de liberar el buffer resultante para evitar fugas de memoria.
+     */
     uint8_t *decrypt_buffer(const uint8_t *in, size_t len, uint8_t n, uint8_t k)
     {
         uint8_t *out = new uint8_t[len];
@@ -34,6 +51,21 @@ namespace
         return out;
     }
 
+    /**
+     * @brief Evalúa si un buffer contiene una proporción suficiente de caracteres ASCII imprimibles.
+     *
+     * Recorre el buffer y calcula la proporción de caracteres comprendidos en el rango ASCII imprimible (32–126).
+     * Retorna verdadero si la proporción de caracteres imprimibles es mayor o igual al umbral `min_ratio`.
+     *
+     * @param buf        Puntero al buffer a analizar.
+     * @param len        Longitud del buffer en bytes.
+     * @param min_ratio  Proporción mínima aceptada (entre 0.0 y 1.0).
+     *
+     * @return `true` si el buffer cumple con la proporción mínima de caracteres imprimibles,
+     *         `false` en caso contrario o si `len` es cero.
+     *
+     * @warning Si `len` es cero, la función imprime un mensaje de error y retorna `false`.
+     */
     bool printable_ratio(const uint8_t *buf, size_t len, double min_ratio)
     {
 
@@ -58,6 +90,22 @@ namespace
         return (ratio >= min_ratio);
     }
 
+    /**
+     * @brief Verifica si una cadena contiene una subcadena dada.
+     *
+     * Implementa una búsqueda secuencial de la subcadena `part` dentro del texto `text`.
+     *
+     * @param text  Cadena de texto principal donde buscar.
+     * @param part  Subcadena que se desea localizar.
+     *
+     * @return `true` si `part` se encuentra dentro de `text`,
+     *         `false` si no existe coincidencia o si los punteros son nulos.
+     *
+     * @warning Si `text` o `part` son punteros nulos, se imprime un mensaje de error y se retorna `false`.
+     * @warning Si la longitud de `part` es mayor que la de `text`, la función imprime un mensaje de error y retorna `false`.
+     *
+     * @note La búsqueda distingue entre mayúsculas y minúsculas (case-sensitive).
+     */
     bool contains_substr(const char *text, const char *part)
     {
         if (!text || !part)
@@ -71,7 +119,8 @@ namespace
 
         if (part_len > text_len)
         {
-            cout << "Error. Pista más grande que el texto original.\n";
+            // Es molesto obtener esto a la salida a pesar de que encuentra el texto original
+            //cout << "Error. Pista más grande que el texto original.\n";
             return false;
         }
 
