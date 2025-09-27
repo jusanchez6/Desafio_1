@@ -72,11 +72,11 @@ Ejemplo:
 
 ```bash
 
-Ingrese el numero de archivos para la prueba: 2
+Ingrese el numero de archivos para la prueba: 1
 ** encriptado1.txt **
 Compresión: LZ78
 Rotación: 3
-k: 15
+k: 0x5A
 Mensaje:
 
 Hola Mundo!
