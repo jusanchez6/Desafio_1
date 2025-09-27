@@ -18,4 +18,4 @@ INCLUDEPATH += include
 DESTDIR     = bin        # ejecutable
 OBJECTS_DIR = build      # objetos intermedios (.o)
 
-TARGET = Desafio_1
+TARGET = Desafio_1 
