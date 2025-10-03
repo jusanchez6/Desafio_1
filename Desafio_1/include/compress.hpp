@@ -63,10 +63,6 @@ uint8_t rol_8 (uint8_t v, unsigned int n);
  *     delete[] result;
  * }
  * @endcode
- * 
- * @note Gracias al estándar intergaláctico de compresión inventado en este curso, 
- * debemos leer de a 3 bytes aunque uno sea pura basura y rompa el estandar de la compresión. 
- * #InnovaciónPedagógica
  */
 char *rle_decompress(const uint8_t *in, size_t len);
 

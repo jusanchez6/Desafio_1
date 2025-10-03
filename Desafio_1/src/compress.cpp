@@ -67,7 +67,6 @@ char *rle_decompress(const uint8_t* in, size_t len)
 
     for (size_t i = 0; i + 2 < len; i += 3)
     {
-        // Este bloque existe solo para honrar la brillante ocurrencia de empaquetar basura 
         uint8_t basura = in[i];   // primer byte completamente inútil
         (void)basura;             // para silenciar warnings
         
